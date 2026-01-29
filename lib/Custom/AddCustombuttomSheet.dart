@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/CustomTextForm.dart';
+import 'package:todo_list/Custom/EditCustomButtomSheet.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
@@ -53,11 +54,19 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
             ),
           ),
           SizedBox(height: 16),
-          Row(children: [_buildDatePicker(), Text(_date ?? "Choose the Date")]),
+          Row(
+            children: [
+              _buildDatePicker(),
+              Text(_date ?? "Choose the Date", style: textStyle()),
+            ],
+          ),
           Row(
             children: [
               _buildTimePicker(),
-              Text(_pickedTime?.format(context) ?? "Choose the time"),
+              Text(
+                _pickedTime?.format(context) ?? "Choose the time",
+                style: textStyle(),
+              ),
             ],
           ),
           _buildAddButton(),

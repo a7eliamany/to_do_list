@@ -55,10 +55,10 @@ class _Subtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: AlignmentGeometry.centerRight,
+      alignment: AlignmentGeometry.topLeft,
       child: Text(
         "${DateFormat.yMd().format(DateTime.parse(tasks.date!))}  ${tasks.time}",
-        style: TextStyle(color: Colors.red),
+        style: TextStyle(color: Colors.red, fontSize: 13),
       ),
     );
   }

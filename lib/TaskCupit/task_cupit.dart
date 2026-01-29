@@ -51,10 +51,21 @@ class TaskCupit extends HydratedCubit<TaskState> {
     emit(TaskUpdate(tasks: newList));
   }
 
-  taskEdit({required String taskId, String? title}) {
+  taskEdit({
+    required String taskId,
+    String? title,
+    String? category,
+    String? time,
+    String? date,
+  }) {
     final List<TaskModel> newList = state.tasks.map((task) {
       return (task.id == taskId)
-          ? task.copyWith(title: title ?? task.title)
+          ? task.copyWith(
+              title: title ?? task.title,
+              category: category ?? task.category,
+              time: time ?? task.time,
+              date: date ?? task.date,
+            )
           : task;
     }).toList();
     emit(TaskUpdate(tasks: newList));
