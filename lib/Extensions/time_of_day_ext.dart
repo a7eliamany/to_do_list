@@ -22,8 +22,14 @@ extension StringToTimeOfDay on String {
     return TimeOfDay(hour: hour, minute: minute);
   }
 }
-// extension StringDate on DateTime{
-//   String stringDate(){
 
-//   }
-// }
+extension AddedMinutes on TimeOfDay {
+  TimeOfDay addMinutes(int minutes) {
+    final totalMinutes = hour * 60 + minute + minutes;
+
+    final newHour = (totalMinutes ~/ 60) % 24;
+    final newMinute = totalMinutes % 60;
+
+    return TimeOfDay(hour: newHour, minute: newMinute);
+  }
+}

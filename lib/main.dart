@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/cubit/bottom_navigator_cubit.dart';
+import 'package:todo_list/global.dart';
 import 'package:todo_list/home/home.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_list/packages/salomon_bottom_bar.dart';
@@ -13,14 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AwesomeNotifications().requestPermissionToSendNotifications();
 
-  await AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-      channelKey: 'tasks',
-      channelName: 'Tasks',
-      channelDescription: 'Task reminders',
-      importance: NotificationImportance.High,
-    ),
-  ]);
+  await AwesomeNotifications().initialize(null, notificationChannel);
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: HydratedStorageDirectory(
       (await getTemporaryDirectory()).path,

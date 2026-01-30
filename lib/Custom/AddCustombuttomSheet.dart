@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/CustomTextForm.dart';
 import 'package:todo_list/Custom/EditCustomButtomSheet.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
+import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/packages/flush_bar.dart';
@@ -126,6 +127,9 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
           text: "Add",
           color: Colors.green,
           pressEvent: () async {
+            _pickedDate ??= DateTime.now();
+            _pickedTime ??= TimeOfDay.now().addMinutes(15);
+            _category ??= "general";
             _id = _uuid.v4();
             if (textEditingController.text.trim().isEmpty) {
               myFlushBar(
@@ -138,7 +142,7 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
 
             await context.read<TaskCupit>().addtask(
               title: textEditingController.text,
-              category: _category ?? 'general',
+              category: _category!,
               date: _pickedDate ?? DateTime.now(),
               time: _pickedTime ?? TimeOfDay.now(),
               id: _id,
@@ -146,20 +150,35 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
 
             awesomeNotifications.createNotification(
               content: NotificationContent(
+                body: textEditingController.text,
                 backgroundColor: categoryColors[_category],
                 id: _id.hashCode,
-                channelKey: "tasks",
-                title: textEditingController.text,
+                channelKey: "$_category",
+                title: "Task Reminder",
+                payload: {"taskId": _id},
               ),
-              schedule: NotificationCalendar(
-                year: _pickedDate!.year,
-                day: _pickedDate!.day,
-                month: _pickedDate!.month,
-                hour: _pickedTime!.hour,
-                second: 0,
-                minute: _pickedTime!.minute,
-              ),
+              // schedule: NotificationCalendar(
+              //   year: _pickedDate!.year,
+              //   day: _pickedDate!.day,
+              //   month: _pickedDate!.month,
+              //   hour: _pickedTime!.hour,
+              //   second: 0,
+              //   minute: _pickedTime!.minute,
+              // ),
+              actionButtons: [
+                NotificationActionButton(
+                  key: 'DONE',
+                  label: 'Done',
+                  actionType: ActionType.Default,
+                ),
+                NotificationActionButton(
+                  key: 'SNOOZE',
+                  label: 'Snooze 10m',
+                  actionType: ActionType.Default,
+                ),
+              ],
             );
+
             textEditingController.clear();
             Navigator.of(context).pop();
           },
