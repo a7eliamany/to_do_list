@@ -64,11 +64,7 @@ class _Edit extends StatelessWidget {
           context: context,
           builder: (context) => Scaffold(
             resizeToAvoidBottomInset: true,
-            body: EditCustomButtomSheet(
-              taskId: tasks.id,
-              index: index,
-              textEditingController: textEditingController,
-            ),
+            body: EditCustomButtomSheet(taskId: tasks.id),
           ),
         );
       },

@@ -6,89 +6,92 @@ import 'package:todo_list/Custom/CustomTextForm.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
-import 'package:todo_list/TaskCupit/task_state.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/packages/flush_bar.dart';
+import 'package:todo_list/task_model.dart';
 
 class EditCustomButtomSheet extends StatefulWidget {
   final String taskId;
-  final int index;
-  final TextEditingController textEditingController;
-  const EditCustomButtomSheet({
-    super.key,
-    required this.textEditingController,
-    required this.index,
-    required this.taskId,
-  });
+
+  const EditCustomButtomSheet({super.key, required this.taskId});
 
   @override
   State<EditCustomButtomSheet> createState() => _EditCustomButtomSheet();
 }
 
 class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
+  late final TextEditingController textEditingController;
   String? category;
-  late TimeOfDay _pickedTime;
-  late DateTime _pickedDate;
+  TimeOfDay? _pickedTime;
+  DateTime? _pickedDate;
+  late final TaskModel task;
+
+  @override
+  void initState() {
+    super.initState();
+    task = context.read<TaskCupit>().getTaskById(widget.taskId);
+    _pickedTime = task.time!.toTimeOfDay12h();
+    _pickedDate = DateTime.parse(task.date!);
+    category = task.category;
+    textEditingController = TextEditingController(text: task.title);
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskCupit, TaskState>(
-      builder: (context, state) {
-        var tasks = state.tasks[widget.index];
-        _pickedTime = tasks.time!.toTimeOfDay12h();
-        _pickedDate = DateTime.parse(tasks.date!);
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //textFiled
+          CustomTextForm(textEditingController: textEditingController),
+          SizedBox(height: 16),
+          FilterChipCustom(
+            category: category!,
+            onSelected: (val) async {
+              final result = await showMenu(
+                position: RelativeRect.fromLTRB(100, 300, 100, 100),
+                context: context,
+                items: categoryitems,
+              );
+              if (result != null) {
+                category = result;
+                setState(() {});
+              }
+            },
+          ),
+          SizedBox(height: 16),
+          Row(
             children: [
-              //textFiled
-              CustomTextForm(
-                textEditingController: widget.textEditingController,
-              ),
-              SizedBox(height: 16),
-              FilterChipCustom(
-                category: tasks.category!,
-                onSelected: (val) async {
-                  final results = await showMenu(
-                    position: RelativeRect.fromLTRB(100, 300, 100, 100),
-                    context: context,
-                    items: categoryitems,
-                  );
-                  category = results ?? tasks.category;
-                },
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  _buildDatePicker(taskDate: DateTime.parse(tasks.date!)),
-                  Text(
-                    DateFormat.yMd().format(DateTime.parse(tasks.date!)),
-                    style: textStyle(),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  _buildTimePicker(tasktime: tasks.time!.toTimeOfDay12h()),
-                  Text(tasks.time!, style: textStyle()),
-                ],
-              ),
-              _buildEditButton(taskdate: tasks.date!, tasktime: tasks.time!),
+              _buildDatePicker(),
+              Text(DateFormat.yMd().format(_pickedDate!), style: textStyle()),
             ],
           ),
-        );
-      },
+          SizedBox(height: 16),
+          Row(
+            children: [
+              _buildTimePicker(),
+              Text(_pickedTime!.to12HourFormat(), style: textStyle()),
+            ],
+          ),
+          _buildEditButton(),
+        ],
+      ),
     );
   }
 
-  Widget _buildTimePicker({required TimeOfDay tasktime}) {
+  Widget _buildTimePicker() {
     return IconButton(
       onPressed: () async {
         final TimeOfDay? time = await showTimePicker(
           context: context,
-          initialTime: _pickedTime ?? tasktime,
+          initialTime: _pickedTime!,
         );
         if (time != null) {
           _pickedTime = time;
@@ -99,17 +102,20 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
     );
   }
 
-  Widget _buildDatePicker({required DateTime taskDate}) {
+  Widget _buildDatePicker() {
     return IconButton(
       onPressed: () async {
         final DateTime? date = await showDatePicker(
           context: context,
-          initialDate: taskDate,
+          initialDate: _pickedDate!.isBefore(DateTime.now())
+              ? DateTime.now()
+              : _pickedDate!,
           firstDate: DateTime.now(),
           lastDate: DateTime(2099),
         );
         if (date != null) {
           _pickedDate = date;
+
           setState(() {});
         }
       },
@@ -117,10 +123,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
     );
   }
 
-  Widget _buildEditButton({
-    required String tasktime,
-    required String taskdate,
-  }) {
+  Widget _buildEditButton() {
     return Align(
       alignment: Alignment.bottomRight,
       child: SizedBox(
@@ -128,15 +131,15 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
         child: AnimatedButton(
           buttonTextStyle: TextStyle(fontSize: 18, color: Colors.white),
           pressEvent: () {
-            if (widget.textEditingController.text.trim().isNotEmpty) {
+            if (textEditingController.text.trim().isNotEmpty) {
               context.read<TaskCupit>().taskEdit(
-                taskId: widget.taskId,
-                title: widget.textEditingController.text,
+                taskId: task.id,
+                title: textEditingController.text,
                 category: category,
-                time: _pickedTime.to12HourFormat(),
-                date: _pickedDate.toIso8601String(),
+                time: _pickedTime!.to12HourFormat(),
+                date: _pickedDate!.toIso8601String(),
               );
-              widget.textEditingController.clear();
+              textEditingController.clear();
               Navigator.of(context).pop();
             } else {
               myFlushBar(

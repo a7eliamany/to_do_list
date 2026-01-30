@@ -78,6 +78,10 @@ class TaskCupit extends HydratedCubit<TaskState> {
     emit(TaskUpdate(tasks: newlist));
   }
 
+  TaskModel getTaskById(String id) {
+    return state.tasks.firstWhere((task) => task.id == id);
+  }
+
   @override
   TaskState? fromJson(Map<String, dynamic> json) {
     final tasksList = json['todolist'] as List<dynamic>?;
