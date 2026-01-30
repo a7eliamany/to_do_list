@@ -21,9 +21,7 @@ class AddTaskButton extends StatelessWidget {
               context: context,
               builder: (context) => Scaffold(
                 resizeToAvoidBottomInset: true,
-                body: AddCustombuttomSheet(
-                  textEditingController: textEditingController,
-                ),
+                body: AddCustombuttomSheet(),
               ),
             );
           },

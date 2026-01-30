@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todo_list/Extensions/time_of_day_ext.dart';
 
 class MyCleneder extends StatelessWidget {
   const MyCleneder({super.key});
@@ -20,9 +20,14 @@ class MyCleneder extends StatelessWidget {
             AnimatedButton(
               color: Colors.blueGrey,
               pressEvent: () async {
-                TimeOfDay time = TimeOfDay.now();
-                final parts = time.to12HourFormat();
-                print(parts.split(" "));
+                awesomeNotifications.createNotification(
+                  content: NotificationContent(
+                    id: 2,
+                    channelKey: 'tasks',
+                    title: 'Task Reminder',
+                    body: "hello world",
+                  ),
+                );
               },
             ),
           ],
@@ -31,3 +36,5 @@ class MyCleneder extends StatelessWidget {
     );
   }
 }
+
+AwesomeNotifications awesomeNotifications = AwesomeNotifications();

@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -10,6 +11,16 @@ import 'package:todo_list/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AwesomeNotifications().requestPermissionToSendNotifications();
+
+  await AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+      channelKey: 'tasks',
+      channelName: 'Tasks',
+      channelDescription: 'Task reminders',
+      importance: NotificationImportance.High,
+    ),
+  ]);
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: HydratedStorageDirectory(
       (await getTemporaryDirectory()).path,

@@ -1,4 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -8,20 +10,23 @@ import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/packages/flush_bar.dart';
+import 'package:todo_list/test.dart';
+import 'package:uuid/uuid.dart';
 
 class AddCustombuttomSheet extends StatefulWidget {
-  final TextEditingController textEditingController;
-  const AddCustombuttomSheet({super.key, required this.textEditingController});
+  const AddCustombuttomSheet({super.key});
   @override
   State<AddCustombuttomSheet> createState() => _CustombuttomSheetState();
 }
 
 class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
+  TextEditingController textEditingController = TextEditingController();
   final GlobalKey<FormState> globalKey = GlobalKey();
   String? _category;
   TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
   String? _date;
+  late String _id;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +38,7 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
           // text form
           Form(
             key: globalKey,
-            child: CustomTextForm(
-              textEditingController: widget.textEditingController,
-            ),
+            child: CustomTextForm(textEditingController: textEditingController),
           ),
           SizedBox(height: 16),
           Align(
@@ -122,8 +125,9 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
         child: AnimatedButton(
           text: "Add",
           color: Colors.green,
-          pressEvent: () {
-            if (widget.textEditingController.text.trim().isEmpty) {
+          pressEvent: () async {
+            _id = _uuid.v4();
+            if (textEditingController.text.trim().isEmpty) {
               myFlushBar(
                 context: context,
                 message: "Task can`t be empty",
@@ -132,14 +136,31 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
               return;
             }
 
-            context.read<TaskCupit>().addtask(
-              title: widget.textEditingController.text,
+            await context.read<TaskCupit>().addtask(
+              title: textEditingController.text,
               category: _category ?? 'general',
               date: _pickedDate ?? DateTime.now(),
               time: _pickedTime ?? TimeOfDay.now(),
+              id: _id,
             );
 
-            widget.textEditingController.clear();
+            awesomeNotifications.createNotification(
+              content: NotificationContent(
+                backgroundColor: categoryColors[_category],
+                id: _id.hashCode,
+                channelKey: "tasks",
+                title: textEditingController.text,
+              ),
+              schedule: NotificationCalendar(
+                year: _pickedDate!.year,
+                day: _pickedDate!.day,
+                month: _pickedDate!.month,
+                hour: _pickedTime!.hour,
+                second: 0,
+                minute: _pickedTime!.minute,
+              ),
+            );
+            textEditingController.clear();
             Navigator.of(context).pop();
           },
         ),
@@ -147,3 +168,5 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
     );
   }
 }
+
+final Uuid _uuid = Uuid();

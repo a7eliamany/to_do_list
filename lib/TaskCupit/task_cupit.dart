@@ -3,7 +3,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_state.dart';
 import 'package:todo_list/task_model.dart';
-import 'package:uuid/uuid.dart';
 
 class TaskCupit extends HydratedCubit<TaskState> {
   TaskCupit() : super(TaskUpdate(tasks: []));
@@ -13,9 +12,8 @@ class TaskCupit extends HydratedCubit<TaskState> {
     required String title,
     required String category,
     required DateTime date,
+    required String id,
   }) {
-    Uuid uuid = Uuid();
-
     final formattedTime = time.to12HourFormat();
 
     emit(
@@ -23,7 +21,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
         tasks: [
           ...state.tasks,
           TaskModel(
-            id: uuid.v4(),
+            id: id,
             title: title,
             isCompleted: false,
             category: category,

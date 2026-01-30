@@ -54,9 +54,6 @@ class _Edit extends StatelessWidget {
       borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
       flex: 2,
       onPressed: (BuildContext context) {
-        TextEditingController textEditingController = TextEditingController(
-          text: tasks.title,
-        );
         showModalBottomSheet(
           isScrollControlled: true,
           showDragHandle: true,

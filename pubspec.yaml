@@ -49,16 +49,22 @@ dependencies:
   lottie: ^3.3.2
   table_calendar: ^3.2.0
   salomon_bottom_bar: ^3.3.2
-  flutter_local_notifications: ^19.5.0
-  timezone: ^0.10.1
   google_fonts: ^8.0.0
+  awesome_notifications: ^0.10.1
+  http: ^1.6.0
+  palette_generator: ^0.3.3+7
   
 
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
-
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/icon/icons8-to-do-list-100.png"
+  min_sdk_android: 21
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -81,6 +87,7 @@ flutter:
   assets:
     - assets/images/
     - assets/animation/
+    - assets/icon/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
