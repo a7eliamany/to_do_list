@@ -15,7 +15,6 @@ class TaskCupit extends HydratedCubit<TaskState> {
     required String id,
   }) {
     final formattedTime = time.to12HourFormat();
-
     emit(
       TaskUpdate(
         tasks: [

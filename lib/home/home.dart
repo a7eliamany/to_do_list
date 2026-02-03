@@ -1,7 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/home/home_header.dart';
 import 'package:todo_list/home/home_addTaskButton.dart';
 import 'package:todo_list/home/home_tasks.dart';
+import 'package:todo_list/notification/task_action_bus.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,8 +16,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final TextEditingController textEditingController = TextEditingController();
+  late StreamSubscription _sub;
+
+  @override
+  void initState() {
+    _sub = TaskActionBus.instance.stream.listen((taskId) {
+      context.read<TaskCupit>().taskToggle(taskId);
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
+    _sub.cancel();
     textEditingController.dispose();
     super.dispose();
   }

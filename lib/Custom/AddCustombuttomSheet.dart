@@ -1,6 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -10,24 +8,34 @@ import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
+import 'package:todo_list/notification/notification_creat.dart';
 import 'package:todo_list/packages/flush_bar.dart';
-import 'package:todo_list/test.dart';
 import 'package:uuid/uuid.dart';
 
-class AddCustombuttomSheet extends StatefulWidget {
-  const AddCustombuttomSheet({super.key});
+class AddCustomButtomSheet extends StatefulWidget {
+  const AddCustomButtomSheet({super.key});
   @override
-  State<AddCustombuttomSheet> createState() => _CustombuttomSheetState();
+  State<AddCustomButtomSheet> createState() => _AddCustomButtomSheetState();
 }
 
-class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
-  TextEditingController textEditingController = TextEditingController();
-  final GlobalKey<FormState> globalKey = GlobalKey();
+class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
+  late TextEditingController textEditingController;
+  final GlobalKey globalKey = GlobalKey<FormState>();
   String? _category;
   TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
-  String? _date;
   late String _id;
+  @override
+  void initState() {
+    textEditingController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +69,12 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
           Row(
             children: [
               _buildDatePicker(),
-              Text(_date ?? "Choose the Date", style: textStyle()),
+              Text(
+                (_pickedDate == null)
+                    ? "Choose the Date"
+                    : DateFormat.yMd().format(_pickedDate!),
+                style: textStyle(),
+              ),
             ],
           ),
           Row(
@@ -73,7 +86,7 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
               ),
             ],
           ),
-          _buildAddButton(),
+          Align(alignment: Alignment.bottomRight, child: _buildAddButton()),
         ],
       ),
     );
@@ -93,7 +106,6 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
         if (date != null) {
           setState(() {
             _pickedDate = date;
-            _date = DateFormat.yMMMMd().format(date);
           });
         }
       },
@@ -119,73 +131,37 @@ class _CustombuttomSheetState extends State<AddCustombuttomSheet> {
   }
 
   Widget _buildAddButton() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: SizedBox(
-        width: 150,
-        child: AnimatedButton(
-          text: "Add",
-          color: Colors.green,
-          pressEvent: () async {
-            _pickedDate ??= DateTime.now();
-            _pickedTime ??= TimeOfDay.now().addMinutes(15);
-            _category ??= "general";
-            _id = _uuid.v4();
-            if (textEditingController.text.trim().isEmpty) {
-              myFlushBar(
-                context: context,
-                message: "Task can`t be empty",
-                color: Colors.red,
-              );
-              return;
-            }
+    return SizedBox(
+      width: 150,
+      child: AnimatedButton(
+        text: "Add",
+        color: Colors.green,
+        pressEvent: () async {
+          _pickedDate ??= DateTime.now().add(const Duration(minutes: 15));
+          _pickedTime ??= TimeOfDay.now().addMinutes(15);
+          _id = _uuid.v4();
 
-            await context.read<TaskCupit>().addtask(
-              title: textEditingController.text,
-              category: _category!,
-              date: _pickedDate ?? DateTime.now(),
-              time: _pickedTime ?? TimeOfDay.now(),
-              id: _id,
+          if (textEditingController.text.trim().isEmpty) {
+            myFlushBar(
+              context: context,
+              message: "Task can`t be empty",
+              color: Colors.red,
             );
-
-            awesomeNotifications.createNotification(
-              content: NotificationContent(
-                body: textEditingController.text,
-                backgroundColor: categoryColors[_category],
-                id: _id.hashCode,
-                channelKey: "$_category",
-                title: "Task Reminder",
-                payload: {"taskId": _id},
-              ),
-              // schedule: NotificationCalendar(
-              //   year: _pickedDate!.year,
-              //   day: _pickedDate!.day,
-              //   month: _pickedDate!.month,
-              //   hour: _pickedTime!.hour,
-              //   second: 0,
-              //   minute: _pickedTime!.minute,
-              // ),
-              actionButtons: [
-                NotificationActionButton(
-                  key: 'DONE',
-                  label: 'Done',
-                  actionType: ActionType.Default,
-                ),
-                NotificationActionButton(
-                  key: 'SNOOZE',
-                  label: 'Snooze 10m',
-                  actionType: ActionType.Default,
-                ),
-              ],
-            );
-
-            textEditingController.clear();
-            Navigator.of(context).pop();
-          },
-        ),
+            return;
+          }
+          context.read<TaskCupit>().addtask(
+            title: textEditingController.text,
+            category: _category ?? "general",
+            date: _pickedDate!,
+            time: _pickedTime!,
+            id: _id,
+          );
+          await creatNotification(taskId: _id, context: context);
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
 }
 
-final Uuid _uuid = Uuid();
+Uuid _uuid = Uuid();

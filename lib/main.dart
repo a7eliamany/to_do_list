@@ -7,12 +7,12 @@ import 'package:todo_list/cubit/bottom_navigator_cubit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/home/home.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:todo_list/notification/notification_controller.dart';
 import 'package:todo_list/packages/salomon_bottom_bar.dart';
 import 'package:todo_list/test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AwesomeNotifications().requestPermissionToSendNotifications();
 
   await AwesomeNotifications().initialize(null, notificationChannel);
   HydratedBloc.storage = await HydratedStorage.build(
@@ -24,8 +24,29 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod:
+          NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod:
+          NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod:
+          NotificationController.onDismissActionReceivedMethod,
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +56,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => BottomNavigatorCubit()),
       ],
       child: MaterialApp(
+        navigatorKey: MyApp.navigatorKey,
         routes: {"home": (context) => Home()},
         theme: ThemeData.dark(),
         title: 'ToDoApp',

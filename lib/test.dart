@@ -3,9 +3,15 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MyCleneder extends StatelessWidget {
+class MyCleneder extends StatefulWidget {
   const MyCleneder({super.key});
 
+  @override
+  State<MyCleneder> createState() => _MyClenederState();
+}
+
+class _MyClenederState extends State<MyCleneder> {
+  @override
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -17,19 +23,7 @@ class MyCleneder extends StatelessWidget {
               lastDay: DateTime.utc(2030, 3, 14),
               focusedDay: DateTime.now(),
             ),
-            AnimatedButton(
-              color: Colors.blueGrey,
-              pressEvent: () async {
-                awesomeNotifications.createNotification(
-                  content: NotificationContent(
-                    id: 2,
-                    channelKey: 'tasks',
-                    title: 'Task Reminder',
-                    body: "hello world",
-                  ),
-                );
-              },
-            ),
+            AnimatedButton(color: Colors.blueGrey, pressEvent: () async {}),
           ],
         ),
       ),
