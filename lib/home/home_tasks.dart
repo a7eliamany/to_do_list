@@ -40,7 +40,10 @@ class HomeTasks extends StatelessWidget {
           } else {
             return ListView.builder(
               itemCount: state.tasks!.length,
-              itemBuilder: (context, index) => Tasks(index: index),
+              itemBuilder: (context, index) => InkWell(
+                child: Tasks(index: index),
+                onTap: () {},
+              ),
             );
           }
         } else {

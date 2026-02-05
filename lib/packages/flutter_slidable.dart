@@ -38,6 +38,16 @@ class FlutterSlidable extends StatelessWidget {
           _Delete(taskId: taskId),
         ],
       ),
+      startActionPane: ActionPane(
+        dragDismissible: true,
+        dismissible: DismissiblePane(
+          onDismissed: () {
+            context.read<TaskCupit>().taskToggle(taskId, context);
+          },
+        ),
+        motion: ScrollMotion(),
+        children: [_Toggle(taskId: taskId)],
+      ),
       child: child,
     );
   }
@@ -88,6 +98,25 @@ class _Delete extends StatelessWidget {
       foregroundColor: Colors.white,
       icon: Icons.delete,
       label: 'Delete',
+    );
+  }
+}
+
+class _Toggle extends StatelessWidget {
+  final String taskId;
+  const _Toggle({required this.taskId});
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidableAction(
+      borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
+      onPressed: (BuildContext context) {
+        context.read<TaskCupit>().taskToggle(taskId, context);
+      },
+      backgroundColor: Colors.green,
+      foregroundColor: Colors.white,
+      icon: Icons.check,
+      label: 'Toggle',
     );
   }
 }
