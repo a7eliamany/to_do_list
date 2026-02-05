@@ -1,17 +1,16 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MyCleneder extends StatefulWidget {
-  const MyCleneder({super.key});
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
 
   @override
-  State<MyCleneder> createState() => _MyClenederState();
+  State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _MyClenederState extends State<MyCleneder> {
-  DateTime _focousedDay = DateTime.now();
+class _CalendarPageState extends State<CalendarPage> {
+  DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
@@ -25,17 +24,27 @@ class _MyClenederState extends State<MyCleneder> {
               TableCalendar(
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: _focousedDay,
-                selectedDayPredicate: (day) {
-                  return isSameDay(day, _focousedDay);
+                focusedDay: _focusedDay,
+
+                availableCalendarFormats: const {
+                  CalendarFormat.month: 'Month',
+                  CalendarFormat.week: 'Week',
                 },
-                onDaySelected: (DateTime focousedDay, DateTime datetime) {
-                  _focousedDay = focousedDay;
-                  setState(() {});
+
+                selectedDayPredicate: (day) {
+                  return isSameDay(day, _selectedDay);
+                },
+
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
                 },
               ),
+              Spacer( ),
               AnimatedButton(
-                color: Colors.blueGrey,
+                color: Colors.teal,
                 pressEvent: () async {},
                 text: "Test",
               ),
@@ -47,4 +56,4 @@ class _MyClenederState extends State<MyCleneder> {
   }
 }
 
-AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+

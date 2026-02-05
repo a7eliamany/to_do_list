@@ -1,4 +1,4 @@
-import 'package:todo_list/task_model.dart';
+import 'package:todo_list/Model/task_model.dart';
 
 abstract class TaskState {
   final List<TaskModel>? tasks;

@@ -1,10 +1,11 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_state.dart';
 import 'package:todo_list/notification/notification_create.dart';
-import 'package:todo_list/task_model.dart';
-import 'package:todo_list/test.dart';
+import 'package:todo_list/Model/task_model.dart';
+import 'package:todo_list/views/test.dart';
 
 class TaskCupit extends HydratedCubit<TaskState> {
   TaskCupit() : super(TaskUpdate(tasks: []));
@@ -47,7 +48,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
       return task;
     }).toList();
     if (updatedTask.isCompleted) {
-      awesomeNotifications.cancel(id.hashCode);
+      AwesomeNotifications().cancel(id.hashCode);
     } else {
       creatNotification(taskId: id, context: context);
     }
@@ -60,7 +61,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     final List<TaskModel> newList = state.tasks!
         .where((task) => task.id != id)
         .toList();
-    awesomeNotifications.cancel(id.hashCode);
+    AwesomeNotifications().cancel(id.hashCode);
     emit(TaskUpdate(tasks: newList));
   }
 
