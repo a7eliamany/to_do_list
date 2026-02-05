@@ -1,0 +1,8 @@
+// coming updates
+
+add tasks sorts
+Calender features (events)
+a view page to see task property
+theme mode
+setting page
+enhance add and edit task page

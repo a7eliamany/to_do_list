@@ -12,13 +12,13 @@ import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/packages/flush_bar.dart';
 import 'package:uuid/uuid.dart';
 
-class AddCustomButtomSheet extends StatefulWidget {
-  const AddCustomButtomSheet({super.key});
+class AddCustomBottomSheet extends StatefulWidget {
+  const AddCustomBottomSheet({super.key});
   @override
-  State<AddCustomButtomSheet> createState() => _AddCustomButtomSheetState();
+  State<AddCustomBottomSheet> createState() => _AddCustomBottomSheetState();
 }
 
-class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
+class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
   late TextEditingController textEditingController;
 
   String? _category;
@@ -168,7 +168,7 @@ class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
           );
           creatNotification(taskId: _id, context: context);
           Navigator.of(context).pop();
-          myFlushBar(context: context, message: "Task added succefully");
+          myFlushBar(context: context, message: "Task added successfully");
         },
       ),
     );
