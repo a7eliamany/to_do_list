@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_list/cubit/bottom_navigator_cubit.dart';
-import 'package:todo_list/home/home.dart';
+import 'package:todo_list/cubit/bottom_navigator/bottom_navigator_cubit.dart';
+import 'package:todo_list/views/home/home.dart';
 import 'package:todo_list/packages/salomon_bottom_bar.dart';
-import 'package:todo_list/test.dart';
+import 'package:todo_list/views/test.dart';
 
 class Pages extends StatefulWidget {
   const Pages({super.key});
@@ -35,7 +35,7 @@ class _PagesState extends State<Pages> {
         onPageChanged: (val) {
           context.read<BottomNavigatorCubit>().changePage(val);
         },
-        children: const [Home(), MyCleneder()],
+        children: const [Home(), CalendarPage()],
       ),
       bottomNavigationBar: MySalomonBottomBar(
         onTap: (val) {

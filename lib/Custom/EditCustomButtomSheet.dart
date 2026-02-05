@@ -5,11 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/CustomTextForm.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
-import 'package:todo_list/TaskCupit/task_cupit.dart';
+import 'package:todo_list/cubit/Task/task_cupit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/packages/flush_bar.dart';
-import 'package:todo_list/task_model.dart';
+import 'package:todo_list/Model/task_model.dart';
 
 class EditCustomButtomSheet extends StatefulWidget {
   final String taskId;

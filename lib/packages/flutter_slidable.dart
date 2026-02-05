@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todo_list/Custom/EditCustomButtomSheet.dart';
-import 'package:todo_list/TaskCupit/task_cupit.dart';
-import 'package:todo_list/TaskCupit/task_state.dart';
-import 'package:todo_list/task_model.dart';
+import 'package:todo_list/cubit/Task/task_cupit.dart';
+import 'package:todo_list/cubit/Task/task_state.dart';
+import 'package:todo_list/Model/task_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FlutterSlidable extends StatelessWidget {

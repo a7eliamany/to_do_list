@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:todo_list/cubit/bottom_navigator_cubit.dart';
+import 'package:todo_list/cubit/bottom_navigator/bottom_navigator_cubit.dart';
 
 class MySalomonBottomBar extends StatefulWidget {
   final Function(int)? onTap;
@@ -30,7 +30,7 @@ class _MySalomonBottomBarState extends State<MySalomonBottomBar> {
             ),
             SalomonBottomBarItem(
               icon: Icon(Icons.calendar_today_outlined),
-              title: Text("calendar<notWorking>"),
+              title: Text("calendar"),
               selectedColor: Colors.teal,
             ),
           ],
