@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _sub = TaskActionBus.instance.stream.listen((taskId) {
-      context.read<TaskCupit>().taskToggle(taskId);
+      context.read<TaskCupit>().taskToggle(taskId, context);
     });
     super.initState();
   }

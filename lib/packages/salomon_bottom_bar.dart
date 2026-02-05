@@ -4,39 +4,38 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:todo_list/cubit/bottom_navigator_cubit.dart';
 
 class MySalomonBottomBar extends StatefulWidget {
-  const MySalomonBottomBar({super.key});
+  final Function(int)? onTap;
+  const MySalomonBottomBar({super.key, this.onTap});
 
   @override
   State<MySalomonBottomBar> createState() => _MySalomonBottomBarState();
 }
 
 class _MySalomonBottomBarState extends State<MySalomonBottomBar> {
-  int currentindex = 0;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SalomonBottomBar(
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: theme.unselectedWidgetColor,
-      onTap: (val) {
-        setState(() {
-          currentindex = val;
-        });
-        context.read<BottomNavigatorCubit>().changePage(val);
+    return BlocBuilder<BottomNavigatorCubit, BottomNavigatorState>(
+      builder: (context, state) {
+        return SalomonBottomBar(
+          selectedItemColor: theme.colorScheme.primary,
+          unselectedItemColor: theme.unselectedWidgetColor,
+          onTap: widget.onTap,
+          currentIndex: state.index,
+          items: [
+            SalomonBottomBarItem(
+              icon: Icon(Icons.home),
+              title: Text("home"),
+              selectedColor: Colors.pink,
+            ),
+            SalomonBottomBarItem(
+              icon: Icon(Icons.calendar_today_outlined),
+              title: Text("calendar<notWorking>"),
+              selectedColor: Colors.teal,
+            ),
+          ],
+        );
       },
-      currentIndex: currentindex,
-      items: [
-        SalomonBottomBarItem(
-          icon: Icon(Icons.home),
-          title: Text("home"),
-          selectedColor: Colors.pink,
-        ),
-        SalomonBottomBarItem(
-          icon: Icon(Icons.calendar_today_outlined),
-          title: Text("calendar"),
-          selectedColor: Colors.teal,
-        ),
-      ],
     );
   }
 }

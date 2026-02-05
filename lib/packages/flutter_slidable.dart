@@ -32,7 +32,7 @@ class FlutterSlidable extends StatelessWidget {
         children: [
           BlocBuilder<TaskCupit, TaskState>(
             builder: (context, state) {
-              return _Edit(index: index, tasks: state.tasks[index]);
+              return _Edit(index: index, tasks: state.tasks![index]);
             },
           ),
           _Delete(taskId: taskId),

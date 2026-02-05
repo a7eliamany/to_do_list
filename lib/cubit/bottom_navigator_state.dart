@@ -10,6 +10,10 @@ final class BottomNavigatorInitial extends BottomNavigatorState {
   const BottomNavigatorInitial({required super.index});
 }
 
+// final class BottomNavigatorLoading extends BottomNavigatorState {
+//   BottomNavigatorLoading({required super.index});
+// }
+
 final class BottomNavigatorChange extends BottomNavigatorState {
   const BottomNavigatorChange({required super.index});
 }

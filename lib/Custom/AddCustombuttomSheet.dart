@@ -8,7 +8,7 @@ import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
-import 'package:todo_list/notification/notification_creat.dart';
+import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/packages/flush_bar.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,11 +20,12 @@ class AddCustomButtomSheet extends StatefulWidget {
 
 class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
   late TextEditingController textEditingController;
-  final GlobalKey globalKey = GlobalKey<FormState>();
+
   String? _category;
   TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
   late String _id;
+  bool repeat = false;
   @override
   void initState() {
     textEditingController = TextEditingController();
@@ -45,21 +46,15 @@ class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // text form
-          Form(
-            key: globalKey,
-            child: CustomTextForm(textEditingController: textEditingController),
-          ),
+          CustomTextForm(textEditingController: textEditingController),
+
           SizedBox(height: 16),
           Align(
             alignment: Alignment.centerLeft,
             child: FilterChipCustom(
               category: _category ?? "Category",
               onSelected: (val) async {
-                final results = await showMenu(
-                  position: RelativeRect.fromLTRB(60, 200, 100, 100),
-                  context: context,
-                  items: categoryitems,
-                );
+                final results = await categoryMenu;
                 _category = results ?? _category;
                 setState(() {});
               },
@@ -84,6 +79,20 @@ class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
                 _pickedTime?.format(context) ?? "Choose the time",
                 style: textStyle(),
               ),
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                activeColor: Colors.green,
+                value: repeat,
+                onChanged: (val) {
+                  setState(() {
+                    repeat = val ?? false;
+                  });
+                },
+              ),
+              Text("Repeat", style: textStyle()),
             ],
           ),
           Align(alignment: Alignment.bottomRight, child: _buildAddButton()),
@@ -155,13 +164,21 @@ class _AddCustomButtomSheetState extends State<AddCustomButtomSheet> {
             date: _pickedDate!,
             time: _pickedTime!,
             id: _id,
+            repeat: repeat,
           );
-          await creatNotification(taskId: _id, context: context);
+          creatNotification(taskId: _id, context: context);
           Navigator.of(context).pop();
+          myFlushBar(context: context, message: "Task added succefully");
         },
       ),
     );
   }
+
+  Future<dynamic> get categoryMenu => showMenu(
+    position: RelativeRect.fromLTRB(60, 200, 100, 100),
+    context: context,
+    items: categoryitems,
+  );
 }
 
 Uuid _uuid = Uuid();

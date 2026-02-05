@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_state.dart';
+import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/task_model.dart';
+import 'package:todo_list/test.dart';
 
 class TaskCupit extends HydratedCubit<TaskState> {
   TaskCupit() : super(TaskUpdate(tasks: []));
@@ -13,12 +15,14 @@ class TaskCupit extends HydratedCubit<TaskState> {
     required String category,
     required DateTime date,
     required String id,
-  }) {
+    bool? repeat,
+  }) async {
+    emit(TaskLoading(tasks: state.tasks));
     final formattedTime = time.to12HourFormat();
     emit(
       TaskUpdate(
         tasks: [
-          ...state.tasks,
+          ...state.tasks ?? [],
           TaskModel(
             id: id,
             title: title,
@@ -26,25 +30,37 @@ class TaskCupit extends HydratedCubit<TaskState> {
             category: category,
             date: date.toIso8601String(),
             time: formattedTime,
+            repeat: repeat ?? false,
           ),
         ],
       ),
     );
   }
 
-  taskToggle(String id) {
-    final newList = state.tasks.map((task) {
-      return id == task.id
-          ? task.copyWith(isCompleted: !task.isCompleted)
-          : task;
+  taskToggle(String id, BuildContext context) {
+    late TaskModel updatedTask;
+    final newList = state.tasks!.map((task) {
+      if (id == task.id) {
+        updatedTask = task.copyWith(isCompleted: !task.isCompleted);
+        return updatedTask;
+      }
+      return task;
     }).toList();
+    if (updatedTask.isCompleted) {
+      awesomeNotifications.cancel(id.hashCode);
+    } else {
+      creatNotification(taskId: id, context: context);
+    }
     emit(TaskUpdate(tasks: newList));
   }
 
-  taskRemove(String id) {
-    final List<TaskModel> newList = state.tasks
+  taskRemove(String id) async {
+    emit(TaskLoading(tasks: state.tasks));
+    await Future.delayed(const Duration(milliseconds: 300));
+    final List<TaskModel> newList = state.tasks!
         .where((task) => task.id != id)
         .toList();
+    awesomeNotifications.cancel(id.hashCode);
     emit(TaskUpdate(tasks: newList));
   }
 
@@ -54,29 +70,24 @@ class TaskCupit extends HydratedCubit<TaskState> {
     String? category,
     String? time,
     String? date,
+    bool? repeat,
   }) {
-    final List<TaskModel> newList = state.tasks.map((task) {
+    final List<TaskModel> newList = state.tasks!.map((task) {
       return (task.id == taskId)
           ? task.copyWith(
               title: title ?? task.title,
               category: category ?? task.category,
               time: time ?? task.time,
               date: date ?? task.date,
+              repeat: repeat,
             )
           : task;
     }).toList();
     emit(TaskUpdate(tasks: newList));
   }
 
-  taskChangeCategory({required String taskId, required String category}) {
-    final List<TaskModel> newlist = state.tasks.map((task) {
-      return task.id == taskId ? task.copyWith(category: category) : task;
-    }).toList();
-    emit(TaskUpdate(tasks: newlist));
-  }
-
   TaskModel getTaskById(String id) {
-    return state.tasks.firstWhere((task) => task.id == id);
+    return state.tasks!.firstWhere((task) => task.id == id);
   }
 
   @override
@@ -94,6 +105,6 @@ class TaskCupit extends HydratedCubit<TaskState> {
 
   @override
   Map<String, dynamic>? toJson(TaskState state) {
-    return {'todolist': state.tasks.map((task) => task.tojson()).toList()};
+    return {'todolist': state.tasks!.map((task) => task.tojson()).toList()};
   }
 }

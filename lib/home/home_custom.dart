@@ -16,7 +16,7 @@ class Tasks extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TaskCupit, TaskState>(
       builder: (context, state) {
-        var tasks = state.tasks[index];
+        var tasks = state.tasks![index];
         return FlutterSlidable(
           taskId: tasks.id,
           index: index,
@@ -42,7 +42,7 @@ class _Leading extends StatelessWidget {
       activeColor: Colors.green,
       value: tasks.isCompleted,
       onChanged: (val) {
-        context.read<TaskCupit>().taskToggle(tasks.id);
+        context.read<TaskCupit>().taskToggle(tasks.id, context);
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/TaskCupit/task_state.dart';
@@ -12,25 +13,33 @@ class HomeTasks extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TaskCupit, TaskState>(
       builder: (context, state) {
+        if (state is TaskLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
         if (state is TaskUpdate) {
-          if (state.tasks.isEmpty) {
-            return Column(
-              children: [
-                Center(
-                  child: Lottie.asset(
+          if (state.tasks!.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Lottie.asset(
                     'assets/animation/EmptyList.json',
                     repeat: true,
+                    reverse: true,
                   ),
-                ),
-                Text(
-                  "Tasks is Empty",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-              ],
+                  Text(
+                    "Tasks is Empty",
+                    style: GoogleFonts.afacad(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             );
           } else {
             return ListView.builder(
-              itemCount: state.tasks.length,
+              itemCount: state.tasks!.length,
               itemBuilder: (context, index) => Tasks(index: index),
             );
           }

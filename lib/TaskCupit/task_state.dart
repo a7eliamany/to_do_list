@@ -1,8 +1,12 @@
 import 'package:todo_list/task_model.dart';
 
-class TaskState {
-  final List<TaskModel> tasks;
-  TaskState({required this.tasks});
+abstract class TaskState {
+  final List<TaskModel>? tasks;
+  TaskState({this.tasks});
+}
+
+class TaskLoading extends TaskState {
+  TaskLoading({super.tasks});
 }
 
 class TaskUpdate extends TaskState {

@@ -7,6 +7,7 @@ import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/TaskCupit/task_cupit.dart';
 import 'package:todo_list/global.dart';
+import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/packages/flush_bar.dart';
 import 'package:todo_list/task_model.dart';
 
@@ -23,6 +24,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
   TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
   late final TaskModel task;
+  bool? repeat;
 
   @override
   void initState() {
@@ -78,6 +80,20 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
               Text(_pickedTime!.to12HourFormat(), style: textStyle()),
             ],
           ),
+          Row(
+            children: [
+              Checkbox(
+                activeColor: Colors.green,
+                value: repeat ?? task.repeat,
+                onChanged: (val) {
+                  setState(() {
+                    repeat = val ?? task.repeat;
+                  });
+                },
+              ),
+              Text("Repeat", style: textStyle()),
+            ],
+          ),
           _buildEditButton(),
         ],
       ),
@@ -129,22 +145,28 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
         child: AnimatedButton(
           buttonTextStyle: TextStyle(fontSize: 18, color: Colors.white),
           pressEvent: () {
-            if (textEditingController.text.trim().isNotEmpty) {
+            if (textEditingController.text.trim().isEmpty) {
+              myFlushBar(
+                context: context,
+                message: "Task can`t be empty",
+                color: Colors.red,
+              );
+              return;
+            } else {
               context.read<TaskCupit>().taskEdit(
                 taskId: task.id,
                 title: textEditingController.text,
                 category: category,
                 time: _pickedTime!.to12HourFormat(),
                 date: _pickedDate!.toIso8601String(),
+                repeat: repeat,
               );
-
-              textEditingController.clear();
+              creatNotification(context: context, taskId: widget.taskId);
               Navigator.of(context).pop();
-            } else {
               myFlushBar(
                 context: context,
-                message: "Task can`t be empty",
-                color: Colors.red,
+                message: "Task Edited Succefully",
+                color: Colors.blue,
               );
             }
           },
