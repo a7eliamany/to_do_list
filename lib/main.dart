@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
+import 'package:todo_list/cubit/Theme/theme_cupit.dart';
+import 'package:todo_list/cubit/Theme/theme_state.dart';
 import 'package:todo_list/cubit/bottom_navigator/bottom_navigator_cubit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/views/home/home.dart';
@@ -13,7 +15,10 @@ import 'package:todo_list/pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AwesomeNotifications().requestPermissionToSendNotifications();
-  await AwesomeNotifications().initialize(null, notificationChannel);
+  await AwesomeNotifications().initialize(
+    null,
+    TaskCategoryConfig.notificationChannel,
+  );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: HydratedStorageDirectory(
       (await getTemporaryDirectory()).path,
@@ -53,20 +58,20 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (context) => TaskCupit()),
         BlocProvider(create: (context) => BottomNavigatorCubit()),
+        BlocProvider(create: (context) => ThemeCupit()),
       ],
-      child: MaterialApp(
-        navigatorKey: MyApp.navigatorKey,
-        routes: {"home": (context) => Home()},
-        theme: ThemeData.dark(),
-        title: 'ToDoApp',
-        home: Scaffold(
-          body: BlocBuilder<BottomNavigatorCubit, BottomNavigatorState>(
-            builder: (context, state) {
-              return Pages();
-            },
-          ),
-        ),
-        debugShowCheckedModeBanner: false,
+      child: BlocBuilder<ThemeCupit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            navigatorKey: MyApp.navigatorKey,
+            routes: {"home": (context) => Home()},
+            theme: state.darkMode ? ThemeData.dark() : ThemeData.light(),
+            title: 'ToDoApp',
+            home: Scaffold(body: Pages()),
+
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }

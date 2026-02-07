@@ -5,7 +5,7 @@ class TaskModel {
   final String? color;
   final bool isCompleted;
   final String? date;
-  final String? time;
+
   final bool? remind;
   final bool? repeat;
   final String? notes;
@@ -15,7 +15,7 @@ class TaskModel {
   TaskModel({
     required this.id,
     this.date,
-    this.time,
+
     this.remind,
     this.repeat,
     this.notes,
@@ -35,7 +35,7 @@ class TaskModel {
       'color': color ?? "blue",
       'isCompleted': isCompleted,
       'date': date ?? "",
-      'time': time ?? "",
+
       'remind': remind ?? false,
       'repeat': repeat ?? false,
       'notes': notes ?? '',
@@ -52,7 +52,7 @@ class TaskModel {
       color: json['color'] as String?,
       isCompleted: json['isCompleted'] as bool,
       date: json['date'] as String?,
-      time: json['time'] as String?,
+
       remind: json['remind'] as bool?,
       repeat: json['repeat'] as bool?,
       notes: json['notes'] as String?,
@@ -67,7 +67,7 @@ class TaskModel {
     String? color,
     bool? isCompleted,
     String? date,
-    String? time,
+
     bool? remind,
     bool? repeat,
     String? notes,
@@ -81,12 +81,29 @@ class TaskModel {
       color: color ?? this.color,
       isCompleted: isCompleted ?? this.isCompleted,
       date: date ?? this.date,
-      time: time ?? this.time,
+
       remind: remind ?? this.remind,
       repeat: repeat ?? this.repeat,
       notes: notes ?? this.notes,
       image: image ?? this.image,
       priority: priority ?? this.priority,
     );
+  }
+
+  Map<String, dynamic> tojsonWithTime() {
+    return {
+      'id': id,
+      'title': title,
+      'category': category ?? "general",
+      'color': color ?? "blue",
+      'isCompleted': isCompleted,
+      'date': DateTime.parse(date!),
+
+      'remind': remind ?? false,
+      'repeat': repeat ?? false,
+      'notes': notes ?? '',
+      'image': image ?? '',
+      'priority': priority ?? 'normal',
+    };
   }
 }

@@ -57,7 +57,7 @@ class _Subtitle extends StatelessWidget {
     return Align(
       alignment: AlignmentGeometry.topLeft,
       child: Text(
-        "${DateFormat.yMd().format(DateTime.parse(tasks.date!))}  ${tasks.time}",
+        "${DateFormat.yMd().format(DateTime.parse(tasks.date!))}  ${DateFormat.jm().format(DateTime.parse(tasks.date!))}",
         style: TextStyle(color: Colors.red, fontSize: 13),
       ),
     );

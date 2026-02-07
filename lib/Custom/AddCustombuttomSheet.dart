@@ -54,8 +54,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
             child: FilterChipCustom(
               category: _category ?? "Category",
               onSelected: (val) async {
-                final results = await categoryMenu;
-                _category = results ?? _category;
+                final TaskCategory results = await categoryMenu;
+                _category = results.name;
                 setState(() {});
               },
             ),
@@ -81,20 +81,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
               ),
             ],
           ),
-          Row(
-            children: [
-              Checkbox(
-                activeColor: Colors.green,
-                value: repeat,
-                onChanged: (val) {
-                  setState(() {
-                    repeat = val ?? false;
-                  });
-                },
-              ),
-              Text("Repeat", style: textStyle()),
-            ],
-          ),
+          _repeatCheckBox(),
+
           Align(alignment: Alignment.bottomRight, child: _buildAddButton()),
         ],
       ),
@@ -148,6 +136,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
         pressEvent: () async {
           _pickedDate ??= DateTime.now().add(const Duration(minutes: 15));
           _pickedTime ??= TimeOfDay.now().addMinutes(15);
+
+          DateTime dateTime = combineDateAndTime(_pickedDate!, _pickedTime!);
           _id = _uuid.v4();
 
           if (textEditingController.text.trim().isEmpty) {
@@ -161,8 +151,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
           context.read<TaskCupit>().addtask(
             title: textEditingController.text,
             category: _category ?? "general",
-            date: _pickedDate!,
-            time: _pickedTime!,
+            date: dateTime,
+
             id: _id,
             repeat: repeat,
           );
@@ -174,11 +164,31 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
     );
   }
 
+  Widget _repeatCheckBox() {
+    return Row(
+      children: [
+        Checkbox(
+          activeColor: Colors.green,
+          value: repeat,
+          onChanged: (val) {
+            setState(() {
+              repeat = val ?? false;
+            });
+          },
+        ),
+        Text("Repeat", style: textStyle()),
+      ],
+    );
+  }
+
   Future<dynamic> get categoryMenu => showMenu(
     position: RelativeRect.fromLTRB(60, 200, 100, 100),
     context: context,
-    items: categoryitems,
+    items: TaskCategoryConfig.categoryitems,
   );
 }
 
 Uuid _uuid = Uuid();
+DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+}

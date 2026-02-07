@@ -19,7 +19,8 @@ class FilterChipCustom extends StatelessWidget {
           fontSize: 17,
         ),
       ),
-      backgroundColor: categoryColors[category],
+      backgroundColor: TaskCategoryConfig
+          .categoryColors[TaskCategoryConfig.stringToCategory(category)],
       onSelected: onSelected ?? (val) {},
       label: Text(category.substring(0, 1).toUpperCase()),
       shape: ContinuousRectangleBorder(

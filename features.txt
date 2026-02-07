@@ -1,8 +1,13 @@
 // coming updates
 
-add tasks sorts
+// add tasks sorts (Added Sucssefully) 2/7/2026
+// theme mode (Added Sucssefully) 2/7/2026
 Calender features (events)
 a view page to see task property
-theme mode
 setting page
 enhance add and edit task page
+
+
+// coming after next update
+
+1- more sorts type

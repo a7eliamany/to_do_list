@@ -2,9 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_list/Custom/AddCustombuttomSheet.dart';
 import 'package:todo_list/Custom/CustomTextForm.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
-import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/notification/notification_create.dart';
@@ -21,7 +21,6 @@ class EditCustomButtomSheet extends StatefulWidget {
 class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
   late final TextEditingController textEditingController;
   String? category;
-  TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
   late final TaskModel task;
   bool? repeat;
@@ -30,7 +29,6 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
   void initState() {
     super.initState();
     task = context.read<TaskCupit>().getTaskById(widget.taskId);
-    _pickedTime = task.time!.toTimeOfDay12h();
     _pickedDate = DateTime.parse(task.date!);
     category = task.category;
     textEditingController = TextEditingController(text: task.title);
@@ -58,7 +56,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
               final result = await showMenu(
                 position: RelativeRect.fromLTRB(100, 300, 100, 100),
                 context: context,
-                items: categoryitems,
+                items: TaskCategoryConfig.categoryitems,
               );
               if (result != null) {
                 category = result;
@@ -77,7 +75,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
           Row(
             children: [
               _buildTimePicker(),
-              Text(_pickedTime!.to12HourFormat(), style: textStyle()),
+              Text(DateFormat.jm().format(_pickedDate!), style: textStyle()),
             ],
           ),
           Row(
@@ -103,12 +101,16 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
   Widget _buildTimePicker() {
     return IconButton(
       onPressed: () async {
+        final initilTime = TimeOfDay(
+          hour: _pickedDate!.hour,
+          minute: _pickedDate!.minute,
+        );
         final TimeOfDay? time = await showTimePicker(
           context: context,
-          initialTime: _pickedTime!,
+          initialTime: initilTime,
         );
         if (time != null) {
-          _pickedTime = time;
+          _pickedDate = combineDateAndTime(_pickedDate!, time);
           setState(() {});
         }
       },
@@ -128,8 +130,11 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
           lastDate: DateTime(2099),
         );
         if (date != null) {
-          _pickedDate = date;
-
+          final time = TimeOfDay(
+            hour: _pickedDate!.hour,
+            minute: _pickedDate!.minute,
+          );
+          _pickedDate = combineDateAndTime(date, time);
           setState(() {});
         }
       },
@@ -157,7 +162,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
                 taskId: task.id,
                 title: textEditingController.text,
                 category: category,
-                time: _pickedTime!.to12HourFormat(),
+
                 date: _pickedDate!.toIso8601String(),
                 repeat: repeat,
               );

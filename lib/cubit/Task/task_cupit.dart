@@ -1,17 +1,14 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/cubit/Task/task_state.dart';
 import 'package:todo_list/notification/notification_create.dart';
 import 'package:todo_list/Model/task_model.dart';
-import 'package:todo_list/views/test.dart';
 
 class TaskCupit extends HydratedCubit<TaskState> {
   TaskCupit() : super(TaskUpdate(tasks: []));
 
   addtask({
-    required TimeOfDay time,
     required String title,
     required String category,
     required DateTime date,
@@ -19,7 +16,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     bool? repeat,
   }) async {
     emit(TaskLoading(tasks: state.tasks));
-    final formattedTime = time.to12HourFormat();
+
     emit(
       TaskUpdate(
         tasks: [
@@ -30,7 +27,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
             isCompleted: false,
             category: category,
             date: date.toIso8601String(),
-            time: formattedTime,
+
             repeat: repeat ?? false,
           ),
         ],
@@ -69,7 +66,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     required String taskId,
     String? title,
     String? category,
-    String? time,
+
     String? date,
     bool? repeat,
   }) {
@@ -78,13 +75,26 @@ class TaskCupit extends HydratedCubit<TaskState> {
           ? task.copyWith(
               title: title ?? task.title,
               category: category ?? task.category,
-              time: time ?? task.time,
+
               date: date ?? task.date,
               repeat: repeat,
             )
           : task;
     }).toList();
     emit(TaskUpdate(tasks: newList));
+  }
+
+  void sortTasks() async {
+    emit(TaskLoading(tasks: state.tasks));
+
+    final List<TaskModel> sortedTasks = state.tasks!;
+    sortedTasks.sort((a, b) {
+      DateTime dateTimeA = DateTime.parse(a.date!);
+      DateTime dateTimeB = DateTime.parse(b.date!);
+      return dateTimeA.compareTo(dateTimeB);
+    });
+    await Future.delayed(Duration(milliseconds: 400));
+    emit(TaskUpdate(tasks: sortedTasks));
   }
 
   TaskModel getTaskById(String id) {
