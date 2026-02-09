@@ -44,7 +44,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
       }
       return task;
     }).toList();
-    if (updatedTask.isCompleted) {
+    if (updatedTask.isCompleted && !updatedTask.repeat!) {
       AwesomeNotifications().cancel(id.hashCode);
     } else {
       creatNotification(taskId: id, context: context);
@@ -54,7 +54,6 @@ class TaskCupit extends HydratedCubit<TaskState> {
 
   taskRemove(String id) async {
     emit(TaskLoading(tasks: state.tasks));
-    await Future.delayed(const Duration(milliseconds: 300));
     final List<TaskModel> newList = state.tasks!
         .where((task) => task.id != id)
         .toList();
@@ -93,7 +92,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
       DateTime dateTimeB = DateTime.parse(b.date!);
       return dateTimeA.compareTo(dateTimeB);
     });
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(Duration(milliseconds: 100));
     emit(TaskUpdate(tasks: sortedTasks));
   }
 

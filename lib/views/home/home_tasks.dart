@@ -38,13 +38,7 @@ class HomeTasks extends StatelessWidget {
               ),
             );
           } else {
-            return ListView.builder(
-              itemCount: state.tasks!.length,
-              itemBuilder: (context, index) => InkWell(
-                child: Tasks(index: index),
-                onTap: () {},
-              ),
-            );
+            return Tasks(tasks: state.tasks!);
           }
         } else {
           return Text('');

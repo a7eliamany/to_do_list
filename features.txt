@@ -6,8 +6,11 @@ Calender features (events)
 a view page to see task property
 setting page
 enhance add and edit task page
+animtaion to tasksAded
+notification permission(important)
 
 
 // coming after next update
 
 1- more sorts type
+2- make the user to rank the tasks as he want (challenge but i can)

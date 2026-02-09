@@ -4,27 +4,28 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
-import 'package:todo_list/cubit/Task/task_state.dart';
 import 'package:todo_list/packages/flutter_slidable.dart';
 import 'package:todo_list/Model/task_model.dart';
 
 class Tasks extends StatelessWidget {
-  final int index;
-  const Tasks({super.key, required this.index});
+  final List<TaskModel> tasks;
+  const Tasks({super.key, required this.tasks});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskCupit, TaskState>(
-      builder: (context, state) {
-        var tasks = state.tasks![index];
+    return ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        TaskModel task = tasks[index];
         return FlutterSlidable(
-          taskId: tasks.id,
-          index: index,
-          child: ListTile(
-            trailing: FilterChipCustom(category: tasks.category!),
-            leading: _Leading(tasks: tasks),
-            subtitle: _Subtitle(tasks: tasks),
-            title: _Title(tasks: tasks),
+          taskId: task.id,
+          child: Card(
+            child: ListTile(
+              trailing: FilterChipCustom(category: task.category!),
+              leading: _Leading(tasks: task),
+              subtitle: _Subtitle(tasks: task),
+              title: _ListTitle(tasks: task),
+            ),
           ),
         );
       },
@@ -64,9 +65,9 @@ class _Subtitle extends StatelessWidget {
   }
 }
 
-class _Title extends StatelessWidget {
+class _ListTitle extends StatelessWidget {
   final TaskModel tasks;
-  const _Title({required this.tasks});
+  const _ListTitle({required this.tasks});
 
   @override
   Widget build(BuildContext context) {

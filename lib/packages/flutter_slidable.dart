@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_list/Custom/EditCustomButtomSheet.dart';
+import 'package:todo_list/views/edit_custom_buttom_sheet.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
-import 'package:todo_list/cubit/Task/task_state.dart';
-import 'package:todo_list/Model/task_model.dart';
 import 'package:uuid/uuid.dart';
 
 class FlutterSlidable extends StatelessWidget {
   final String taskId;
-  final int index;
   final Widget child;
-  const FlutterSlidable({
-    super.key,
-    required this.child,
-    required this.index,
-    required this.taskId,
-  });
+  const FlutterSlidable({super.key, required this.child, required this.taskId});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +22,7 @@ class FlutterSlidable extends StatelessWidget {
         motion: ScrollMotion(),
         // All actions are defined in the children parameter.
         children: [
-          BlocBuilder<TaskCupit, TaskState>(
-            builder: (context, state) {
-              return _Edit(index: index, tasks: state.tasks![index]);
-            },
-          ),
+          _Edit(taskId: taskId),
           _Delete(taskId: taskId),
         ],
       ),
@@ -54,9 +42,8 @@ class FlutterSlidable extends StatelessWidget {
 }
 
 class _Edit extends StatelessWidget {
-  final TaskModel tasks;
-  final int index;
-  const _Edit({required this.tasks, required this.index});
+  final String taskId;
+  const _Edit({required this.taskId});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +58,7 @@ class _Edit extends StatelessWidget {
           context: context,
           builder: (context) => Scaffold(
             resizeToAvoidBottomInset: true,
-            body: EditCustomButtomSheet(taskId: tasks.id),
+            body: EditCustomButtomSheet(taskId: taskId),
           ),
         );
       },

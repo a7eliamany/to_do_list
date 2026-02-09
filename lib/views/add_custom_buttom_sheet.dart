@@ -2,8 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_list/Custom/CustomTextForm.dart';
-import 'package:todo_list/Custom/EditCustomButtomSheet.dart';
+import 'package:todo_list/Custom/custom_textForm.dart';
+import 'package:todo_list/views/edit_custom_buttom_sheet.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
@@ -54,9 +54,11 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
             child: FilterChipCustom(
               category: _category ?? "Category",
               onSelected: (val) async {
-                final TaskCategory results = await categoryMenu;
-                _category = results.name;
-                setState(() {});
+                final TaskCategory? results = await categoryMenu;
+                if (results != null) {
+                  _category = results.name;
+                  setState(() {});
+                }
               },
             ),
           ),
@@ -131,8 +133,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
     return SizedBox(
       width: 150,
       child: AnimatedButton(
-        text: "Add",
-        color: Colors.green,
+        text: "Add Task",
+        color: Colors.orange,
         pressEvent: () async {
           _pickedDate ??= DateTime.now().add(const Duration(minutes: 15));
           _pickedTime ??= TimeOfDay.now().addMinutes(15);

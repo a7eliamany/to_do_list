@@ -2,8 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_list/Custom/AddCustombuttomSheet.dart';
-import 'package:todo_list/Custom/CustomTextForm.dart';
+import 'package:todo_list/views/add_custom_buttom_sheet.dart';
+import 'package:todo_list/Custom/custom_textForm.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
 import 'package:todo_list/global.dart';
@@ -53,13 +53,9 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
           FilterChipCustom(
             category: category!,
             onSelected: (val) async {
-              final result = await showMenu(
-                position: RelativeRect.fromLTRB(100, 300, 100, 100),
-                context: context,
-                items: TaskCategoryConfig.categoryitems,
-              );
-              if (result != null) {
-                category = result;
+              final TaskCategory? results = await categoryMenu;
+              if (results != null) {
+                category = results.name;
                 setState(() {});
               }
             },
@@ -181,6 +177,12 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
       ),
     );
   }
+
+  Future<dynamic> get categoryMenu => showMenu(
+    position: RelativeRect.fromLTRB(60, 200, 100, 100),
+    context: context,
+    items: TaskCategoryConfig.categoryitems,
+  );
 }
 
 TextStyle textStyle() {
