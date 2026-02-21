@@ -8,15 +8,13 @@ import 'package:todo_list/Model/task_model.dart';
 class TaskCupit extends HydratedCubit<TaskState> {
   TaskCupit() : super(TaskUpdate(tasks: []));
 
-  addtask({
+  void addtask({
     required String title,
     required String category,
     required DateTime date,
     required String id,
     bool? repeat,
   }) async {
-    emit(TaskLoading(tasks: state.tasks));
-
     emit(
       TaskUpdate(
         tasks: [
@@ -35,7 +33,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     );
   }
 
-  taskToggle(String id, BuildContext context) {
+  void taskToggle(String id, BuildContext context) {
     late TaskModel updatedTask;
     final newList = state.tasks!.map((task) {
       if (id == task.id) {
@@ -52,7 +50,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     emit(TaskUpdate(tasks: newList));
   }
 
-  taskRemove(String id) async {
+  void taskRemove(String id) async {
     emit(TaskLoading(tasks: state.tasks));
     final List<TaskModel> newList = state.tasks!
         .where((task) => task.id != id)
@@ -61,7 +59,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
     emit(TaskUpdate(tasks: newList));
   }
 
-  taskEdit({
+  void taskEdit({
     required String taskId,
     String? title,
     String? category,
@@ -94,6 +92,11 @@ class TaskCupit extends HydratedCubit<TaskState> {
     });
     await Future.delayed(Duration(milliseconds: 100));
     emit(TaskUpdate(tasks: sortedTasks));
+  }
+
+  void deleteAll() {
+    AwesomeNotifications().cancelAll();
+    emit(TaskUpdate(tasks: []));
   }
 
   TaskModel getTaskById(String id) {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
+import 'package:todo_list/main.dart';
 import 'package:todo_list/packages/flutter_slidable.dart';
 import 'package:todo_list/Model/task_model.dart';
+import 'package:todo_list/views/taskdetail.dart';
 
 class Tasks extends StatelessWidget {
   final List<TaskModel> tasks;
@@ -20,11 +21,20 @@ class Tasks extends StatelessWidget {
         return FlutterSlidable(
           taskId: task.id,
           child: Card(
-            child: ListTile(
-              trailing: FilterChipCustom(category: task.category!),
-              leading: _Leading(tasks: task),
-              subtitle: _Subtitle(tasks: task),
-              title: _ListTitle(tasks: task),
+            child: InkWell(
+              onTap: () {
+                MyApp.navigatorKey.currentState?.push(
+                  MaterialPageRoute(
+                    builder: (_) => TaskDetail(taskId: task.id),
+                  ),
+                );
+              },
+              child: ListTile(
+                trailing: FilterChipCustom(category: task.category!),
+                leading: _Leading(tasks: task),
+                subtitle: _Subtitle(tasks: task),
+                title: _ListTitle(tasks: task),
+              ),
             ),
           ),
         );
@@ -73,13 +83,11 @@ class _ListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       (tasks.title.length > 50) ? tasks.title.substring(0, 49) : tasks.title,
-      style: GoogleFonts.poppins(
-        textStyle: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: (tasks.isCompleted) ? Colors.grey : null,
-          decoration: tasks.isCompleted ? TextDecoration.lineThrough : null,
-        ),
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        color: (tasks.isCompleted) ? Colors.grey : null,
+        decoration: tasks.isCompleted ? TextDecoration.lineThrough : null,
       ),
     );
   }

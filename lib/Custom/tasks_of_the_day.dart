@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_list/Model/task_model.dart';
 import 'package:todo_list/views/home/home_custom.dart';
 
@@ -30,9 +29,10 @@ class _TasksOfTheDayState extends State<TasksOfTheDay> {
         child: Center(
           child: Text(
             'No tasks',
-            style: GoogleFonts.afacad(
-              fontSize: 30,
+            style: TextStyle(
+              fontSize: 40,
               fontWeight: FontWeight.bold,
+              fontFamily: "Afacad",
             ),
           ),
         ),

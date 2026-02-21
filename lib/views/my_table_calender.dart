@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo_list/Custom/tasks_of_the_day.dart';
@@ -83,9 +82,10 @@ class _MyCalenderState extends State<MyCalender> {
                   alignment: Alignment.topLeft,
                   child: Text(
                     DateFormat.yMMMMd().format(_selectedDay),
-                    style: GoogleFonts.afacad(
+                    style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "Afacad",
                     ),
                   ),
                 ),

@@ -20,6 +20,12 @@ class FlutterSlidable extends StatelessWidget {
       endActionPane: ActionPane(
         // A motion is a widget used to control how the pane animates.
         motion: ScrollMotion(),
+        dismissible: DismissiblePane(
+          onDismissed: () {
+            context.read<TaskCupit>().taskRemove(taskId);
+          },
+        ),
+        dragDismissible: true,
         // All actions are defined in the children parameter.
         children: [
           _Edit(taskId: taskId),

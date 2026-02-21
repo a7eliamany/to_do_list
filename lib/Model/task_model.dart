@@ -5,6 +5,7 @@ class TaskModel {
   final String? color;
   final bool isCompleted;
   final String? date;
+  final bool? isDeleted;
 
   final bool? remind;
   final bool? repeat;
@@ -25,6 +26,7 @@ class TaskModel {
     this.category,
     this.color,
     required this.isCompleted,
+    this.isDeleted,
   });
 
   Map<String, dynamic> tojson() {
@@ -41,6 +43,7 @@ class TaskModel {
       'notes': notes ?? '',
       'image': image ?? '',
       'priority': priority ?? 'normal',
+      'isDeleted': isDeleted ?? 'false',
     };
   }
 
@@ -58,6 +61,7 @@ class TaskModel {
       notes: json['notes'] as String?,
       image: json['image'] as String?,
       priority: json['priority'] as String?,
+      isDeleted: json['isDeleted'] as bool?,
     );
   }
   TaskModel copyWith({
@@ -67,7 +71,7 @@ class TaskModel {
     String? color,
     bool? isCompleted,
     String? date,
-
+    bool? isDeleted,
     bool? remind,
     bool? repeat,
     String? notes,
@@ -81,7 +85,7 @@ class TaskModel {
       color: color ?? this.color,
       isCompleted: isCompleted ?? this.isCompleted,
       date: date ?? this.date,
-
+      isDeleted: isDeleted ?? this.isDeleted,
       remind: remind ?? this.remind,
       repeat: repeat ?? this.repeat,
       notes: notes ?? this.notes,

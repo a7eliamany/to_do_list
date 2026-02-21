@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
 import 'package:todo_list/cubit/Task/task_state.dart';
@@ -29,9 +28,10 @@ class HomeTasks extends StatelessWidget {
                   ),
                   Text(
                     "Tasks is Empty",
-                    style: GoogleFonts.afacad(
-                      fontSize: 30,
+                    style: TextStyle(
+                      fontSize: 35,
                       fontWeight: FontWeight.bold,
+                      fontFamily: "StoryScript",
                     ),
                   ),
                 ],
