@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               //Header
-              Header(),
+              Header(title: "home"),
               const SizedBox(height: 50),
               //button Add task
               AddTaskButton(textEditingController: textEditingController),

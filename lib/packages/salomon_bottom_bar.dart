@@ -22,6 +22,7 @@ class _MySalomonBottomBarState extends State<MySalomonBottomBar> {
           unselectedItemColor: theme.unselectedWidgetColor,
           onTap: widget.onTap,
           currentIndex: state.index,
+          margin: EdgeInsets.symmetric(horizontal: 50),
           items: [
             SalomonBottomBarItem(
               icon: Icon(Icons.home),
@@ -32,6 +33,11 @@ class _MySalomonBottomBarState extends State<MySalomonBottomBar> {
               icon: Icon(Icons.calendar_today_outlined),
               title: Text("calendar"),
               selectedColor: Colors.teal,
+            ),
+            SalomonBottomBarItem(
+              icon: Icon(Icons.settings),
+              title: Text("Settings"),
+              selectedColor: Colors.deepOrange,
             ),
           ],
         );

@@ -73,3 +73,11 @@ class FastPopUpMenu extends PopupMenuItem<TaskCategory> {
   FastPopUpMenu({super.key, required TaskCategory value})
     : super(value: value, child: Text(value.name));
 }
+
+class SettingsTitle {
+  static const String askBefore = "Ask before delete";
+  static const String repeatTasks = "Repeat tasks";
+  static const String viewDeletedInCalender = "view deleted tasks in calender";
+  static const String moveToTrash = "Move to Trash";
+  static const String notifications = "notifications";
+}

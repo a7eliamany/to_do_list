@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
-import 'package:todo_list/main.dart';
 import 'package:todo_list/packages/flutter_slidable.dart';
 import 'package:todo_list/Model/task_model.dart';
-import 'package:todo_list/views/taskdetail.dart';
 
 class Tasks extends StatelessWidget {
   final List<TaskModel> tasks;
@@ -19,15 +17,16 @@ class Tasks extends StatelessWidget {
       itemBuilder: (context, index) {
         TaskModel task = tasks[index];
         return FlutterSlidable(
+          isDeleted: task.isDeleted!,
           taskId: task.id,
           child: Card(
             child: InkWell(
               onTap: () {
-                MyApp.navigatorKey.currentState?.push(
-                  MaterialPageRoute(
-                    builder: (_) => TaskDetail(taskId: task.id),
-                  ),
-                );
+                // MyApp.navigatorKey.currentState?.push(
+                //   MaterialPageRoute(
+                //     builder: (_) => TaskDetail(taskId: task.id),
+                //   ),
+                // );
               },
               child: ListTile(
                 trailing: FilterChipCustom(category: task.category!),

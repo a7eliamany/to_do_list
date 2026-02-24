@@ -7,6 +7,8 @@ import 'package:todo_list/Model/task_model.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
 import 'package:todo_list/cubit/Task/task_state.dart';
 import 'package:todo_list/global.dart';
+import 'package:todo_list/services/local_storage.dart';
+import 'package:todo_list/views/home/home_header.dart';
 
 class MyCalender extends StatefulWidget {
   const MyCalender({super.key});
@@ -25,6 +27,7 @@ class _MyCalenderState extends State<MyCalender> {
     return BlocBuilder<TaskCupit, TaskState>(
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(title: Header(title: "Calender")),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
             child: Column(
@@ -35,9 +38,9 @@ class _MyCalenderState extends State<MyCalender> {
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
                   availableCalendarFormats: const {
-                    CalendarFormat.month: 'Month',
-                    CalendarFormat.twoWeeks: "2 Week",
-                    CalendarFormat.week: 'Week',
+                    CalendarFormat.month: 'Week',
+                    CalendarFormat.twoWeeks: "Month",
+                    CalendarFormat.week: '2 Week',
                   },
                   onFormatChanged: (format) {
                     setState(() {
@@ -45,7 +48,16 @@ class _MyCalenderState extends State<MyCalender> {
                     });
                   },
                   eventLoader: (day) {
-                    return state.tasks!.where((task) {
+                    final bool viewDeleted =
+                        LocalStorage.instance.getBool(
+                          SettingsTitle.viewDeletedInCalender,
+                        ) ??
+                        false;
+                    final List<TaskModel> validTasks = viewDeleted
+                        ? state.tasks
+                        : context.read<TaskCupit>().getValidTasks();
+
+                    return validTasks.where((task) {
                       final taskDate = DateTime.parse(task.date!);
 
                       return taskDate.year == day.year &&
@@ -89,7 +101,7 @@ class _MyCalenderState extends State<MyCalender> {
                     ),
                   ),
                 ),
-                TasksOfTheDay(selectedDay: _selectedDay, tasks: state.tasks!),
+                TasksOfTheDay(selectedDay: _selectedDay, tasks: state.tasks),
               ],
             ),
           ),

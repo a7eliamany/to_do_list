@@ -1,49 +1,50 @@
 class TaskModel {
   final String id;
   final String title;
+  final bool isCompleted;
   final String? category;
   final String? color;
-  final bool isCompleted;
   final String? date;
   final bool? isDeleted;
-
   final bool? remind;
   final bool? repeat;
   final String? notes;
   final String? image;
   final String? priority;
+  String? deletedDate = DateTime(3099).toIso8601String();
+  String? createdAt = DateTime.now().toIso8601String();
 
   TaskModel({
     required this.id,
+    required this.title,
+    required this.isCompleted,
     this.date,
-
     this.remind,
     this.repeat,
     this.notes,
     this.image,
     this.priority,
-    required this.title,
     this.category,
     this.color,
-    required this.isCompleted,
     this.isDeleted,
+    this.deletedDate,
   });
 
   Map<String, dynamic> tojson() {
     return {
       'id': id,
       'title': title,
+      'isCompleted': isCompleted,
       'category': category ?? "general",
       'color': color ?? "blue",
-      'isCompleted': isCompleted,
       'date': date ?? "",
-
+      'deletedDate': deletedDate ?? '',
       'remind': remind ?? false,
       'repeat': repeat ?? false,
       'notes': notes ?? '',
       'image': image ?? '',
       'priority': priority ?? 'normal',
-      'isDeleted': isDeleted ?? 'false',
+      'isDeleted': isDeleted ?? false,
     };
   }
 
@@ -51,11 +52,11 @@ class TaskModel {
     return TaskModel(
       id: json['id'] as String,
       title: json['title'] as String,
+      isCompleted: json['isCompleted'] as bool,
       category: json['category'] as String?,
       color: json['color'] as String?,
-      isCompleted: json['isCompleted'] as bool,
       date: json['date'] as String?,
-
+      deletedDate: json["deletedDate"] as String?,
       remind: json['remind'] as bool?,
       repeat: json['repeat'] as bool?,
       notes: json['notes'] as String?,
@@ -67,9 +68,9 @@ class TaskModel {
   TaskModel copyWith({
     String? id,
     String? title,
+    bool? isCompleted,
     String? category,
     String? color,
-    bool? isCompleted,
     String? date,
     bool? isDeleted,
     bool? remind,
@@ -77,13 +78,14 @@ class TaskModel {
     String? notes,
     String? image,
     String? priority,
+    String? deletedDate,
   }) {
     return TaskModel(
       id: id ?? this.id,
       title: title ?? this.title,
+      isCompleted: isCompleted ?? this.isCompleted,
       category: category ?? this.category,
       color: color ?? this.color,
-      isCompleted: isCompleted ?? this.isCompleted,
       date: date ?? this.date,
       isDeleted: isDeleted ?? this.isDeleted,
       remind: remind ?? this.remind,
@@ -91,6 +93,7 @@ class TaskModel {
       notes: notes ?? this.notes,
       image: image ?? this.image,
       priority: priority ?? this.priority,
+      deletedDate: deletedDate ?? this.deletedDate,
     );
   }
 
@@ -102,12 +105,13 @@ class TaskModel {
       'color': color ?? "blue",
       'isCompleted': isCompleted,
       'date': DateTime.parse(date!),
-
       'remind': remind ?? false,
       'repeat': repeat ?? false,
       'notes': notes ?? '',
       'image': image ?? '',
       'priority': priority ?? 'normal',
+      "isDeleted": isDeleted ?? false,
+      "deletedDate": deletedDate ?? '',
     };
   }
 }

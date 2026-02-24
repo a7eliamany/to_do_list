@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/custom_textForm.dart';
+import 'package:todo_list/services/local_storage.dart';
 import 'package:todo_list/views/edit_custom_buttom_sheet.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
@@ -25,7 +26,8 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
   TimeOfDay? _pickedTime;
   DateTime? _pickedDate;
   late String _id;
-  bool repeat = false;
+  bool repeat =
+      LocalStorage.instance.getBool(SettingsTitle.repeatTasks) ?? false;
   @override
   void initState() {
     textEditingController = TextEditingController();

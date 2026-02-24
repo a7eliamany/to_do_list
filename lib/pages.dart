@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list/cubit/bottom_navigator/bottom_navigator_cubit.dart';
+import 'package:todo_list/views/Settings/settings_page.dart';
 import 'package:todo_list/views/home/home.dart';
 import 'package:todo_list/packages/salomon_bottom_bar.dart';
 import 'package:todo_list/views/calender_page.dart';
@@ -35,7 +36,7 @@ class _PagesState extends State<Pages> {
         onPageChanged: (val) {
           context.read<BottomNavigatorCubit>().changePage(val);
         },
-        children: const [Home(), CalendarPage()],
+        children: const [Home(), CalendarPage(), Settings()],
       ),
       bottomNavigationBar: MySalomonBottomBar(
         onTap: (val) {
