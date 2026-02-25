@@ -37,7 +37,7 @@ class TaskCupit extends HydratedCubit<TaskState> {
 
   void taskToggle(String id, BuildContext context) {
     late TaskModel updatedTask;
-    final newList = state.tasks!.map((task) {
+    final newList = state.tasks.map((task) {
       if (id == task.id) {
         updatedTask = task.copyWith(isCompleted: !task.isCompleted);
         return updatedTask;

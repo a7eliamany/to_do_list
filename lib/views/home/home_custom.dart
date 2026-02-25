@@ -20,20 +20,15 @@ class Tasks extends StatelessWidget {
           isDeleted: task.isDeleted!,
           taskId: task.id,
           child: Card(
-            child: InkWell(
-              onTap: () {
-                // MyApp.navigatorKey.currentState?.push(
-                //   MaterialPageRoute(
-                //     builder: (_) => TaskDetail(taskId: task.id),
-                //   ),
-                // );
-              },
-              child: ListTile(
-                trailing: FilterChipCustom(category: task.category!),
-                leading: _Leading(tasks: task),
-                subtitle: _Subtitle(tasks: task),
-                title: _ListTitle(tasks: task),
+            child: ListTile(
+              trailing: FilterChipCustom(
+                category: task.category!,
+                isDeleted: task.isDeleted!,
               ),
+              leading: _Leading(task: task),
+              subtitle: _Subtitle(tasks: task),
+              title: _ListTitle(tasks: task),
+              onTap: () {},
             ),
           ),
         );
@@ -43,16 +38,16 @@ class Tasks extends StatelessWidget {
 }
 
 class _Leading extends StatelessWidget {
-  final TaskModel tasks;
-  const _Leading({required this.tasks});
+  final TaskModel task;
+  const _Leading({required this.task});
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
       activeColor: Colors.green,
-      value: tasks.isCompleted,
+      value: task.isCompleted,
       onChanged: (val) {
-        context.read<TaskCupit>().taskToggle(tasks.id, context);
+        context.read<TaskCupit>().taskToggle(task.id, context);
       },
     );
   }
@@ -67,7 +62,9 @@ class _Subtitle extends StatelessWidget {
     return Align(
       alignment: AlignmentGeometry.topLeft,
       child: Text(
-        "${DateFormat.yMd().format(DateTime.parse(tasks.date!))}  ${DateFormat.jm().format(DateTime.parse(tasks.date!))}",
+        (tasks.isDeleted!)
+            ? "deleted at ${DateFormat.yMd().format(DateTime.parse(tasks.deletedDate!))}"
+            : "${DateFormat.yMd().format(DateTime.parse(tasks.date!))}  ${DateFormat.jm().format(DateTime.parse(tasks.date!))}",
         style: TextStyle(color: Colors.red, fontSize: 13),
       ),
     );

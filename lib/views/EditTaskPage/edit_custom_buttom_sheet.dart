@@ -2,7 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_list/views/add_custom_buttom_sheet.dart';
+import 'package:todo_list/views/AddTaskPage/add_custom_buttom_sheet.dart';
 import 'package:todo_list/Custom/custom_textForm.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
@@ -51,6 +51,7 @@ class _EditCustomButtomSheet extends State<EditCustomButtomSheet> {
           CustomTextForm(textEditingController: textEditingController),
           SizedBox(height: 16),
           FilterChipCustom(
+            isDeleted: task.isDeleted!,
             category: category!,
             onSelected: (val) async {
               final TaskCategory? results = await categoryMenu;

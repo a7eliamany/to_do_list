@@ -9,7 +9,7 @@ import 'package:todo_list/cubit/Theme/theme_state.dart';
 import 'package:todo_list/cubit/bottom_navigator/bottom_navigator_cubit.dart';
 import 'package:todo_list/global.dart';
 import 'package:todo_list/services/local_storage.dart';
-import 'package:todo_list/views/deleted_task_page.dart';
+import 'package:todo_list/views/Settings/deleted_task_page.dart';
 import 'package:todo_list/views/home/home.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_list/notification/notification_controller.dart';
@@ -45,6 +45,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    LocalStorage.instance.setBool(SettingsTitle.moveToTrash, true);
     AwesomeNotifications().setListeners(
       onActionReceivedMethod: NotificationController.onActionReceivedMethod,
       onNotificationCreatedMethod:
@@ -73,8 +74,10 @@ class _MyAppState extends State<MyApp> {
               "home": (context) => Home(),
               "DeletedTasksPage": (context) => DeletedTasksPage(),
             },
-            theme: state.darkMode ? ThemeData.dark() : ThemeData.light(),
-            title: 'ToDoApp',
+            themeMode: state.darkMode ? ThemeMode.dark : ThemeMode.light,
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            title: 'ToDo App',
             home: Scaffold(body: Pages()),
 
             debugShowCheckedModeBanner: false,

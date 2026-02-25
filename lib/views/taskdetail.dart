@@ -46,7 +46,10 @@ class _TaskDetailState extends State<TaskDetail> {
                   child: Card(
                     child: ListTile(
                       title: Text(task.title),
-                      trailing: FilterChipCustom(category: task.category!),
+                      trailing: FilterChipCustom(
+                        category: task.category!,
+                        isDeleted: task.isDeleted!,
+                      ),
                       leading: Checkbox(
                         value: task.isCompleted,
                         onChanged: (val) {

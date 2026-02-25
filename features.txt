@@ -1,14 +1,15 @@
 // coming updates
 
-// 1 add tasks sorts (Added Sucssefully) 2/7/2026
-// 2 theme mode (Added Sucssefully) 2/7/2026
-// 3 Calender features (events) (Added Sucssefully) 2/9/2026
-   4 a view page to see task property
-   5 setting page
-   6 enhance add and edit task page
-   7 animtaion to tasksAded
-   8 notification permission(important)
-//  9 delete all tasks button (Added Sucssefully) 2/19/2026
+//  add tasks sorts (Added Sucssefully) 2/7/2026
+//  theme mode (Added Sucssefully) 2/7/2026
+//  Calender features (events) (Added Sucssefully) 2/9/2026
+//  delete all tasks button (Added Sucssefully) 2/19/2026
+//  setting page (Added Sucssefully) 2/24/2026
+//  place for deleted tasks (Added Sucssefully) 2/24/2026
+    a view page to see task property
+    enhance add and edit task page
+    animtaion to tasksAded
+    notification permission(important)
 
 
 // coming after next update
@@ -16,4 +17,3 @@
 1- more sorts type
 2- make the user to rank the tasks as he want (challenge but i can)
 3- can we transfer the task color?
-4- place for deleted tasks;

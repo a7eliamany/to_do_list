@@ -14,10 +14,10 @@ class HomeTasks extends StatelessWidget {
     return BlocBuilder<TaskCupit, TaskState>(
       builder: (context, state) {
         if (state is TaskUpdate) {
-          final isEmptyFromDelete = state.tasks.where(
-            (task) => task.isDeleted == false,
-          );
-          if (isEmptyFromDelete.isEmpty) {
+          final List<TaskModel> notDeletedTasks = state.tasks
+              .where((task) => task.isDeleted == false)
+              .toList();
+          if (notDeletedTasks.isEmpty) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -39,10 +39,7 @@ class HomeTasks extends StatelessWidget {
               ),
             );
           } else {
-            final List<TaskModel> validTasks = context
-                .read<TaskCupit>()
-                .getValidTasks();
-            return Tasks(tasks: validTasks);
+            return Tasks(tasks: notDeletedTasks);
           }
         } else {
           return Text('');

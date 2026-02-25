@@ -31,7 +31,9 @@ class TasksOfTheDay extends StatelessWidget {
     final List<TaskModel> validEvents = context.read<TaskCupit>().getValidTasks(
       events,
     );
-    if (validEvents.isEmpty) {
+    if (events.isNotEmpty) {
+      return Expanded(child: Tasks(tasks: viewDeleted ? events : validEvents));
+    } else {
       return Expanded(
         child: Center(
           child: Text(
@@ -44,8 +46,6 @@ class TasksOfTheDay extends StatelessWidget {
           ),
         ),
       );
-    } else {
-      return Expanded(child: Tasks(tasks: viewDeleted ? events : validEvents));
     }
   }
 }

@@ -37,15 +37,10 @@ class _MyCalenderState extends State<MyCalender> {
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
-                  availableCalendarFormats: const {
-                    CalendarFormat.month: 'Week',
-                    CalendarFormat.twoWeeks: "Month",
-                    CalendarFormat.week: '2 Week',
-                  },
+                  availableCalendarFormats: _availableCalendarFormats,
                   onFormatChanged: (format) {
-                    setState(() {
-                      _calendarFormat = format;
-                    });
+                    _calendarFormat = format;
+                    setState(() {});
                   },
                   eventLoader: (day) {
                     final bool viewDeleted =
@@ -65,21 +60,7 @@ class _MyCalenderState extends State<MyCalender> {
                           taskDate.day == day.day;
                     }).toList();
                   },
-                  calendarBuilders: CalendarBuilders(
-                    markerBuilder: (context, day, events) {
-                      if (events.isEmpty) return null;
-
-                      final firstTask = events.first as TaskModel;
-
-                      TaskCategory taskCategory =
-                          TaskCategoryConfig.stringToCategory(
-                            firstTask.category!,
-                          );
-                      final color =
-                          TaskCategoryConfig.categoryColors[taskCategory];
-                      return CircleAvatar(backgroundColor: color, radius: 5);
-                    },
-                  ),
+                  calendarBuilders: calendarBuilder(),
                   selectedDayPredicate: (day) {
                     return isSameDay(day, _selectedDay);
                   },
@@ -90,17 +71,7 @@ class _MyCalenderState extends State<MyCalender> {
                   },
                 ),
                 SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    DateFormat.yMMMMd().format(_selectedDay),
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Afacad",
-                    ),
-                  ),
-                ),
+                selectedDay(),
                 TasksOfTheDay(selectedDay: _selectedDay, tasks: state.tasks),
               ],
             ),
@@ -109,4 +80,40 @@ class _MyCalenderState extends State<MyCalender> {
       },
     );
   }
+
+  Widget selectedDay() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        DateFormat.yMMMMd().format(_selectedDay),
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          fontFamily: "Afacad",
+        ),
+      ),
+    );
+  }
+
+  CalendarBuilders calendarBuilder() {
+    return CalendarBuilders(
+      markerBuilder: (context, day, events) {
+        if (events.isEmpty) return null;
+
+        final firstTask = events.first as TaskModel;
+
+        TaskCategory taskCategory = TaskCategoryConfig.stringToCategory(
+          firstTask.category!,
+        );
+        final color = TaskCategoryConfig.categoryColors[taskCategory];
+        return CircleAvatar(backgroundColor: color, radius: 5);
+      },
+    );
+  }
 }
+
+Map<CalendarFormat, String> _availableCalendarFormats = const {
+  CalendarFormat.month: 'Week',
+  CalendarFormat.twoWeeks: "Month",
+  CalendarFormat.week: '2 Week',
+};

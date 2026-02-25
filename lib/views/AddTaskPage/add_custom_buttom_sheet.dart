@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/Custom/custom_textForm.dart';
 import 'package:todo_list/services/local_storage.dart';
-import 'package:todo_list/views/edit_custom_buttom_sheet.dart';
+import 'package:todo_list/views/EditTaskPage/edit_custom_buttom_sheet.dart';
 import 'package:todo_list/Custom/filter_chip.dart';
 import 'package:todo_list/Extensions/time_of_day_ext.dart';
 import 'package:todo_list/cubit/Task/task_cupit.dart';
@@ -54,6 +54,7 @@ class _AddCustomBottomSheetState extends State<AddCustomBottomSheet> {
           Align(
             alignment: Alignment.centerLeft,
             child: FilterChipCustom(
+              isDeleted: false,
               category: _category ?? "Category",
               onSelected: (val) async {
                 final TaskCategory? results = await categoryMenu;

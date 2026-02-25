@@ -3,10 +3,16 @@ import 'package:todo_list/global.dart';
 
 class FilterChipCustom extends StatelessWidget {
   final String category;
+  final bool isDeleted;
 
   final void Function(bool)? onSelected;
 
-  const FilterChipCustom({super.key, required this.category, this.onSelected});
+  const FilterChipCustom({
+    super.key,
+    required this.category,
+    this.onSelected,
+    required this.isDeleted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +23,15 @@ class FilterChipCustom extends StatelessWidget {
         fontSize: 17,
         fontFamily: "Pacifico",
       ),
-      backgroundColor: TaskCategoryConfig
-          .categoryColors[TaskCategoryConfig.stringToCategory(category)],
+      backgroundColor: (isDeleted)
+          ? Colors.red
+          : TaskCategoryConfig
+                .categoryColors[TaskCategoryConfig.stringToCategory(category)],
       onSelected: onSelected ?? (val) {},
       tooltip: category,
-      label: Text(category.substring(0, 1).toUpperCase()),
+      label: Text(
+        (isDeleted) ? "Deleted" : category.substring(0, 2).toUpperCase(),
+      ),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(20),
       ),
